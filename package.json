@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "golte dev && go run ."
+    "dev": "golte dev && go run .",
+    "build": "golte prod"
   },
   "dependencies": {
     "@picocss/pico": "2.0.0-alpha1",

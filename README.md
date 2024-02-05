@@ -1,0 +1,6 @@
+# Plateful
+
+## Environment variables
+- OPENAI_API_KEY
+- GOOGLE_SEARCH_ENDPOINT
+- GOOGLE_SEARCH_API_KEY
