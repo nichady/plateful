@@ -1,0 +1,16 @@
+:root {
+    --color-1: #181718;
+    --color-2: #1A1B1A;
+    --color-3: #e0dcce;
+    --color-4: #7cbae7;
+    --color-5: #434E45;
+
+    --pico-background-color: var(--color-3) !important;
+    --pico-h2-color: var(--color-1) !important;
+    --pico-h5-color: var(--color-1) !important;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
