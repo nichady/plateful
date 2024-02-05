@@ -1,6 +1,8 @@
 <script>
     // TODO restrictions such as vegan/vegetarian, allergies, etc...
+    // TODO snack/entree/dessert
 
+    import Choices from "../../lib/Choices.svelte";
     import Svelecte from "svelecte";
     import {
         continents as continentMap,
@@ -10,7 +12,11 @@
 
     const times = ["breakfast", "lunch", "dinner"];
     const flavors = ["sweet", "savory", "salty", "spicy", "sour", "bitter"];
-    const continents = Object.values(continentMap).sort();
+
+    const continents = Object.values(continentMap)
+        .sort()
+        .map((c) => ({ id: c, name: c }));
+
     const countries = Object.entries(countryMap)
         .sort(([, a], [, b]) => a.name.localeCompare(b.name))
         .map(([id, country]) => ({
@@ -20,9 +26,45 @@
 
     let selectByCountry = false;
 
+    let selectedTimes = [];
+    let selectedFlavors = [];
+    let selectedContinents = [];
+    let selectedCountries = [];
 
-    let selectedContinent;
-    let selectedCountry;
+    $: valid =
+        selectedTimes.length > 0 &&
+        selectedFlavors.length > 0 &&
+        (selectByCountry
+            ? selectedCountries.length > 0
+            : selectedContinents.length > 0);
+
+    let includeIngredients;
+    let excludeIngredients;
+
+    let generating = false;
+
+    async function generate() {
+        generating = true;
+
+        const resp = await fetch("/api/generate", {
+            method: "POST",
+            body: JSON.stringify({
+                Times: selectedTimes,
+                Flavors: selectedFlavors,
+                InludeIngredients: includeIngredients,
+                ExcludeIngredients: excludeIngredients,
+                Locations: selectByCountry
+                    ? selectedCountries
+                    : selectedContinents,
+            }),
+        });
+
+        if (resp.status !== 200) {
+            throw resp.statusText;
+        }
+
+        location.href = await resp.text();
+    }
 </script>
 
 <svelte:head>
@@ -30,37 +72,31 @@
 </svelte:head>
 
 <div class="flex">
-    <fieldset>
-        <legend><h5>What kinds of meals are you craving?</h5></legend>
-        {#each times as t}
-            <label>
-                <input type="checkbox" />
-                {t}
-            </label>
-        {/each}
-    </fieldset>
+    <Choices choices={times} bind:selected={selectedTimes}>
+        <h5>What kinds of meal are you craving?</h5>
+    </Choices>
 </div>
 
 <div class="flex">
-    <fieldset>
-        <legend><h5>What flavors do you want in your meal?</h5></legend>
-        {#each flavors as f}
-            <label>
-                <input type="checkbox" />
-                {f}
-            </label>
-        {/each}
-    </fieldset>
+    <Choices choices={flavors} bind:selected={selectedFlavors}>
+        <h5>What flavors do you want in your meal?</h5>
+    </Choices>
 </div>
 
 <div class="flex">
     <h5>What ingredients do you want to use?</h5>
-    <textarea placeholder="Type ingredients here"></textarea>
+    <textarea
+        bind:value={includeIngredients}
+        placeholder="Type ingredients here"
+    />
 </div>
 
 <div class="flex">
     <h5>What ingredients do you want to avoid?</h5>
-    <textarea placeholder="Type ingredients here"></textarea>
+    <textarea
+        bind:value={excludeIngredients}
+        placeholder="Type ingredients here"
+    />
 </div>
 
 <div class="flex">
@@ -69,7 +105,7 @@
         <Svelecte
             placeholder="Select continents"
             options={continents}
-            bind:value={selectedContinent}
+            bind:value={selectedContinents}
             multiple
             style="width: 500px"
         ></Svelecte>
@@ -77,7 +113,7 @@
         <Svelecte
             placeholder="Select countries"
             options={countries}
-            bind:value={selectedCountry}
+            bind:value={selectedCountries}
             multiple
             style="width: 500px"
         ></Svelecte>
@@ -89,7 +125,11 @@
 </div>
 
 <div class="flex">
-    <button>Generate Recipe</button>
+    {#if generating}
+        <button aria-busy="true">Recipe is being created...</button>
+    {:else}
+        <button on:click={generate} disabled={!valid}>Generate Recipe</button>
+    {/if}
 </div>
 
 <style>
@@ -98,20 +138,6 @@
         display: flex;
         align-items: center;
         flex-direction: column;
-    }
-
-    fieldset {
-        display: flex;
-        flex-direction: row;
-        gap: 20px;
-    }
-
-    legend {
-        margin: 0 auto;
-    }
-
-    label {
-        text-transform: capitalize;
     }
 
     textarea {
