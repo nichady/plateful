@@ -3,14 +3,16 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"log"
+	"log/slog"
 	"net/http"
+	"os"
 	"sync"
 	"sync/atomic"
 	"time"
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
+	"github.com/lmittmann/tint"
 	"github.com/nichady/golte"
 	"github.com/nichady/plateful/build"
 )
@@ -21,6 +23,8 @@ var (
 )
 
 var requests atomic.Int32
+
+var log = slog.New(tint.NewHandler(os.Stderr, nil))
 
 func main() {
 	go func() {
@@ -85,15 +89,16 @@ func api(r chi.Router) {
 
 		requests.Add(-1)
 
-		log.Printf("generating recipe: %+v\n", g)
-
+		id := RandomID()
+		log := log.With("recipeID", id)
+		log.Info("generating recipe", "generate", g)
 		recipe, err := generateRecipe(g)
 		if err != nil {
+			log.Error("could not generating recipe", "err", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		id := RandomID()
 		recipeLock.Lock()
 		defer recipeLock.Unlock()
 		recipes[id] = recipe

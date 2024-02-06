@@ -51,7 +51,7 @@ func generateRecipe(g Generate) (Recipe, error) {
 	var recipe Recipe
 	err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &recipe)
 	if err != nil {
-		return Recipe{}, err
+		return Recipe{}, fmt.Errorf("could not unmarshal content: %s", resp.Choices[0].Message.Content)
 	}
 
 	result, err := search.Cse.List().Cx(searchID).Q(recipe.Name).SearchType("image").ImgType("photo").Do()
