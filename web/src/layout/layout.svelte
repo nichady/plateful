@@ -20,20 +20,20 @@
     header {
         display: flex;
         align-items: center;
-        padding: 20px;
-        height: 100px;
-        
-        background: var(--color-4);
-        box-shadow: rgba(0, 0, 0, 0.25) 0px 5px 5px;
+        padding: 10px 20px;
+        height: 110px;
+        background: var(--gold);
+        box-shadow: rgba(0, 0, 0, 0.25) 0px 2px 2px;
     }
-
-    h2 {
-        text-align: center;
-    }
-
+    
     img {
         object-fit: contain;
         height: 100%;
+    }
+    
+    h2 {
+        text-align: center;
+        flex: 1;
     }
 
     main {

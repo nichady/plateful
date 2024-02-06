@@ -15,7 +15,8 @@
 
     const continents = Object.values(continentMap)
         .sort()
-        .map((c) => ({ id: c, name: c }));
+        .map((c) => ({ id: c, name: c }))
+        .filter((c) => c.id !== "Antarctica");
 
     const countries = Object.entries(countryMap)
         .sort(([, a], [, b]) => a.name.localeCompare(b.name))
@@ -59,10 +60,13 @@
             }),
         });
 
-        if (resp.status !== 200) {
-            alert(`error ${resp.status}: ${await resp.text()}`);
-        } else {
+
+        if (resp.status === 200) {
             location.href = await resp.text();
+        } else if (resp.status === 500) {
+            alert("There was a problem generating recipe, try again.");
+        } else {
+            alert(`error ${resp.status}: ${await resp.text()}`);
         }
     }
 </script>

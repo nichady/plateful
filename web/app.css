@@ -5,14 +5,19 @@
     --color-4: #7cbae7;
     --color-5: #434E45;
 
-    --pico-background-color: var(--color-3) !important;
-    --pico-h2-color: var(--color-1) !important;
-    --pico-h5-color: var(--color-1) !important;
+    --pico-background-color: var(--cream) !important;
+    --pico-h2-color: var(--charcoal) !important;
+    --pico-h5-color: var(--charcoal) !important;
+
+    --pico-font-family: 'Open Sans', sans-serif !important;
+
+    --cream: #f4ebd0;
+    --charcoal: #122620;
+    --tan: #b68d40;
+    --gold: #d6ad60;
 }
 
 body {
     margin: 0;
     padding: 0;
-
-    font-family: 'Open Sans', sans-serif;
 }
