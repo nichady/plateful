@@ -1,4 +1,5 @@
 <script>
+    import '@fontsource/open-sans';
     import "@picocss/pico";
     import "../../app.css";
 
@@ -20,6 +21,7 @@
         display: flex;
         align-items: center;
         padding: 20px;
+        height: 100px;
         
         background: var(--color-4);
         box-shadow: rgba(0, 0, 0, 0.25) 0px 5px 5px;
@@ -30,7 +32,8 @@
     }
 
     img {
-        height: 100px;
+        object-fit: contain;
+        height: 100%;
     }
 
     main {
