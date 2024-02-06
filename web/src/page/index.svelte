@@ -60,10 +60,10 @@
         });
 
         if (resp.status !== 200) {
-            throw resp.statusText;
+            alert(`error ${resp.status}: ${await resp.text()}`);
+        } else {
+            location.href = await resp.text();
         }
-
-        location.href = await resp.text();
     }
 </script>
 
