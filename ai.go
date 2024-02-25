@@ -34,8 +34,14 @@ func generateRecipe(g Generate) (Recipe, error) {
 			Model: openai.GPT3Dot5Turbo,
 			Messages: []openai.ChatCompletionMessage{
 				{
-					Role:    openai.ChatMessageRoleSystem,
-					Content: `You are an assistant to come up with food recipes. You should respond in JSON format, like this: {"name": "The name of the recipe", "body": "<everything else, including ingredients, instructions, etc...>"}`,
+					Role: openai.ChatMessageRoleSystem,
+					Content: `You are an assistant to come up with food recipes. You should respond in JSON format, like this for example:
+					{
+						"name": "French Omelette with Cheese",
+						"description": "This is a delicious version of the classic, creamy French omelette with your choice of cheese.",
+						"ingredients": ["3 large eggs", "Kosher salt", "freshly ground black pepper"],
+						"instructions": ["In a medium bowl, beat eggs until last traces of white are mixed in.", "Season with salt and pepper", "Melt butter in a skillet and add eggs."]
+					}`,
 				},
 				{
 					Role:    openai.ChatMessageRoleUser,
@@ -51,7 +57,7 @@ func generateRecipe(g Generate) (Recipe, error) {
 	var recipe Recipe
 	err = json.Unmarshal([]byte(resp.Choices[0].Message.Content), &recipe)
 	if err != nil {
-		return Recipe{}, fmt.Errorf("could not unmarshal content: %s", resp.Choices[0].Message.Content)
+		return Recipe{}, fmt.Errorf("%w for string %s", err, resp.Choices[0].Message.Content)
 	}
 
 	result, err := search.Cse.List().Cx(searchID).Q(recipe.Name).SearchType("image").ImgType("photo").Do()

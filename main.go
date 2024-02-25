@@ -55,9 +55,7 @@ func pages(r chi.Router) {
 		}
 
 		golte.RenderPage(w, r, "page/recipe", map[string]any{
-			"name":  recipe.Name,
-			"image": recipe.Image,
-			"body":  recipe.Body,
+			"recipe": recipe,
 		})
 	})
 	r.Get("/recipes", func(w http.ResponseWriter, r *http.Request) {
@@ -92,12 +90,15 @@ func api(r chi.Router) {
 		id := RandomID()
 		log := log.With("recipeID", id)
 		log.Info("generating recipe", "generate", g)
+
 		recipe, err := generateRecipe(g)
 		if err != nil {
-			log.Error("could not generating recipe", "err", err)
+			log.Error("could not generate recipe", "err", err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
+
+		log.Info("successfully generated recipe", "recipe", recipe)
 
 		recipeLock.Lock()
 		defer recipeLock.Unlock()
@@ -115,7 +116,9 @@ type Generate struct {
 }
 
 type Recipe struct {
-	Name  string `json:"name"`
-	Body  string `json:"body"`
-	Image string `json:"image"`
+	Name         string   `json:"name"`
+	Description  string   `json:"description"`
+	Ingredients  []string `json:"ingredients"`
+	Instructions []string `json:"instructions"`
+	Image        string   `json:"image"`
 }

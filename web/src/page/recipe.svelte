@@ -1,16 +1,23 @@
 <script>
-    export let name;
-    export let image;
-    export let body;
+    export let recipe;
 </script>
 
 <div class="flex">
     <article>
-        <h2>{name}</h2>
-        <div class="img-container">
-            <img src={image} alt />
-        </div>
-        <p>{body}</p>
+        <h2>{recipe.name}</h2>
+        <div class="img-container"><img src={recipe.image} alt /></div>
+
+        <p>{recipe.description}</p>
+
+        Ingredients:
+        <ul>
+            {#each recipe.ingredients as ingredient}<li>{ingredient}</li>{/each}
+        </ul>
+
+        Instructions:
+        <ol>
+            {#each recipe.instructions as instruction}<li>{instruction}</li>{/each}
+        </ol>
     </article>
 </div>
 
@@ -36,10 +43,5 @@
 
     h2 {
         text-align: center;
-    }
-
-    p {
-        white-space: pre-wrap;
-        font-size: 16px;
     }
 </style>
