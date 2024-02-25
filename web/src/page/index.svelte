@@ -68,6 +68,8 @@
         } else {
             alert(`error ${resp.status}: ${await resp.text()}`);
         }
+
+        generating = false;
     }
 </script>
 
