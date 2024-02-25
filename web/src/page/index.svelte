@@ -25,7 +25,7 @@
             name: `${getEmojiFlag(id)}  ${country.name}`,
         }));
 
-    let selectByCountry = false;
+    let selectByContinent = false;
 
     let selectedTimes = [];
     let selectedFlavors = [];
@@ -35,9 +35,7 @@
     $: valid =
         selectedTimes.length > 0 &&
         selectedFlavors.length > 0 &&
-        (selectByCountry
-            ? selectedCountries.length > 0
-            : selectedContinents.length > 0);
+        (selectByContinent ? selectedContinents.length > 0 : selectedCountries.length > 0);
 
     let includeIngredients;
     let excludeIngredients;
@@ -54,9 +52,7 @@
                 Flavors: selectedFlavors,
                 InludeIngredients: includeIngredients,
                 ExcludeIngredients: excludeIngredients,
-                Locations: selectByCountry
-                    ? selectedCountries
-                    : selectedContinents,
+                Locations: selectByContinent ? selectedContinents : selectedCountries,
             }),
         });
 
@@ -107,7 +103,7 @@
 
 <div class="flex">
     <h5>Which types of cuisine do you want?</h5>
-    {#if !selectByCountry}
+    {#if selectByContinent}
         <Svelecte
             placeholder="Select continents"
             options={continents}
@@ -125,8 +121,8 @@
         ></Svelecte>
     {/if}
     <label>
-        <input type="checkbox" role="switch" bind:checked={selectByCountry} />
-        Select by country instead
+        <input type="checkbox" role="switch" bind:checked={selectByContinent} />
+        Select by continent instead
     </label>
 </div>
 
