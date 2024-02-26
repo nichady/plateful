@@ -8,7 +8,7 @@
 
 <header class="container-fluid">
     <img src={plate} alt="Icon of plate" />
-    <h2 class="container-fluid">Plateful - The AI-Powered Recipe Generator.</h2>
+    <h3 class="container-fluid">Plateful - The AI-Powered Recipe Generator.</h3>
     <img src={plate} alt="Icon of plate" />
 </header>
 
@@ -30,8 +30,14 @@
         object-fit: contain;
         height: 100%;
     }
-    
-    h2 {
+
+    @media (orientation: portrait) {
+        img {
+            display: none;
+        }
+    }
+
+    h3 {
         text-align: center;
         flex: 1;
     }

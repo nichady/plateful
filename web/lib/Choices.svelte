@@ -21,7 +21,7 @@
 <style>
     fieldset {
         display: flex;
-        flex-direction: row;
+        flex-wrap: wrap;
         gap: 20px;
     }
 

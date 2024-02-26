@@ -38,7 +38,7 @@
     }
 
     img {
-        height: 500px;
+        max-height: 500px;
     }
 
     h2 {

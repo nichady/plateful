@@ -109,7 +109,7 @@
             options={continents}
             bind:value={selectedContinents}
             multiple
-            style="width: 500px"
+            style="max-width: 500px; width: 100%"
         ></Svelecte>
     {:else}
         <Svelecte
@@ -117,7 +117,7 @@
             options={countries}
             bind:value={selectedCountries}
             multiple
-            style="width: 500px"
+            style="max-width: 500px; width: 100%"
         ></Svelecte>
     {/if}
     <label>
@@ -143,7 +143,7 @@
     }
 
     textarea {
-        width: 500px;
+        max-width: 500px;
         font-size: 16px;
         resize: none;
     }
